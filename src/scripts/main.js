@@ -5,20 +5,35 @@ const TOTAL_TIME = 7500;
 const BREATHE_TIME = (TOTAL_TIME / 5) * 2;
 const HOLD_TIME = TOTAL_TIME / 5;
 
-const breatheAnimation = () => {
-  text.innerHTML = 'Breathe In!';
+const setInnerHTML = element => content => 
+  { element.innerHTML = content; }
 
-  container.classList.remove('shrink');
-  container.classList.add('grow');
+const manageClassList = element => config => {
+  config.add && element.classList.add(...config.add);
+  config.remove && element.classList.remove(...config.remove);
+};
+
+const setTextInnerHTML = setInnerHTML(text);
+const manageContainerClassList = manageClassList(container);
+
+const breatheAnimation = () => {
+  setTextInnerHTML('Breathe In!');
+
+  manageContainerClassList({
+    add: ['grow'],
+    remove: ['shrink']
+  });
 
   setTimeout(() => {
-    text.innerHTML = 'Hold';
-    
-    setTimeout(() => {
-      text.innerHTML = 'Breathe Out!';
+    setTextInnerHTML('Hold');
 
-      container.classList.remove('grow');
-      container.classList.add('shrink');
+    setTimeout(() => {
+      setTextInnerHTML('Breathe Out!');
+
+      manageContainerClassList({
+        add: ['shrink'],
+        remove: ['grow']
+      });
     }, HOLD_TIME);
   }, BREATHE_TIME);
 };
